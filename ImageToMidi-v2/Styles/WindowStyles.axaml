@@ -1,0 +1,51 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- 主窗口样式 -->
+    <Style Selector="Window.main-window">
+        <Setter Property="Background" Value="{StaticResource PrimaryBackgroundBrush}"/>
+        <Setter Property="ExtendClientAreaToDecorationsHint" Value="True"/>
+        <Setter Property="ExtendClientAreaChromeHints" Value="NoChrome"/>
+        <Setter Property="ExtendClientAreaTitleBarHeightHint" Value="50"/>
+    </Style>
+    
+    <!-- 自定义标题栏样式 -->
+    <Style Selector="Border.title-bar">
+        <Setter Property="Background" Value="{StaticResource SecondaryBackgroundBrush}"/>
+        <Setter Property="Height" Value="50"/>
+    </Style>
+    
+    <!-- 标题文字样式 -->
+    <Style Selector="TextBlock.title-text">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="10,0,0,0"/>
+    </Style>
+    
+    <!-- 应用图标样式 -->
+    <Style Selector="Image.app-icon">
+        <Setter Property="Width" Value="40"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Margin" Value="5"/>
+    </Style>
+    
+    <!-- 主要内容区域样式 -->
+    <Style Selector="Grid.main-content">
+        <Setter Property="Background" Value="{StaticResource PrimaryBackgroundBrush}"/>
+    </Style>
+    
+    <!-- 内容区域文字样式 -->
+    <Style Selector="TextBlock.content-placeholder">
+        <Setter Property="Foreground" Value="{StaticResource PrimaryTextBrush}"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    
+    <!-- 控件背景样式 -->
+    <Style Selector="Border.control-background">
+        <Setter Property="Background" Value="{StaticResource SecondaryBackgroundBrush}"/>
+    </Style>
+    
+</Styles>

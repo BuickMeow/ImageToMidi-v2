@@ -9,10 +9,7 @@
         x:DataType="vm:MainWindowViewModel"
         Icon="/Assets/i2m.ico"
         Title="Image To MIDI"
-        ExtendClientAreaToDecorationsHint="True"
-        ExtendClientAreaChromeHints="NoChrome"
-        ExtendClientAreaTitleBarHeightHint="50"
-        Background="#263238"
+        Classes="main-window"
 		Width="1186"
         Height="496">
 
@@ -21,89 +18,22 @@
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
-    <Window.Styles>
-        <!-- 浏览图片按钮样式 -->
-        <Style Selector="Button.browse-button">
-            <Setter Property="HorizontalAlignment" Value="Stretch"/>
-            <Setter Property="HorizontalContentAlignment" Value="Center"/>
-            <Setter Property="VerticalContentAlignment" Value="Center"/>
-            <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Height" Value="32"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Template">
-                <ControlTemplate>
-                    <Border Name="PART_Border"
-                            Background="#3F51B5"
-                            CornerRadius="3"
-                            BorderThickness="0">
-                        <Border.Transitions>
-                            <Transitions>
-                                <!-- 背景颜色过渡动画 -->
-                                <BrushTransition Property="Background" Duration="0:0:0.2"/>
-                            </Transitions>
-                        </Border.Transitions>
-                        <!-- 按钮内容容器 -->
-                        <ContentPresenter Name="PART_ContentPresenter"
-                                        Content="{TemplateBinding Content}"
-                                        Foreground="White"
-                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Padding="{TemplateBinding Padding}"/>
-                    </Border>
-                </ControlTemplate>
-            </Setter>
-        </Style>
-        
-        <!-- 鼠标悬停状态下的背景颜色 -->
-        <Style Selector="Button.browse-button:pointerover /template/ Border#PART_Border">
-            <Setter Property="Background" Value="#717EC8"/>
-        </Style>
-        <!-- 鼠标悬停状态下的文字颜色 -->
-        <Style Selector="Button.browse-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-        
-        <!-- 鼠标按下状态下的背景颜色 -->
-        <Style Selector="Button.browse-button:pressed /template/ Border#PART_Border">
-            <Setter Property="Background" Value="#717EC8"/>
-        </Style>
-        <!-- 鼠标按下状态下的文字颜色 -->
-        <Style Selector="Button.browse-button:pressed /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Foreground" Value="White"/>
-        </Style>
-        
-        <!-- 禁用状态下的背景颜色 -->
-        <Style Selector="Button.browse-button:disabled /template/ Border#PART_Border">
-            <Setter Property="Background" Value="#666666"/>
-        </Style>
-        <!-- 禁用状态下的文字颜色 -->
-        <Style Selector="Button.browse-button:disabled /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Foreground" Value="#999999"/>
-        </Style>
-    </Window.Styles>
-
     <DockPanel>
         <!-- 自定义标题栏 -->
-        <Border Background="#37474F" 
+        <Border Classes="title-bar"
                 DockPanel.Dock="Top" 
-                Height="50" 
                 x:Name="TitleBar"
                 PointerPressed="TitleBar_PointerPressed">
             <DockPanel>
                 <!-- 应用图标 -->
-                <Image Width="40" 
-                       Height="40" 
-                       Margin="5" 
+                <Image Classes="app-icon"
                        Source="/Assets/i2m.png"
                        DockPanel.Dock="Left"/>
                 
                 <!-- 标题文字 -->
                 <TextBlock Text="Image To MIDI" 
-                           Margin="10,0,0,0" 
-                           DockPanel.Dock="Left"
-                           VerticalAlignment="Center" 
-                           FontSize="20"
-                           Foreground="White"/>
+                           Classes="title-text"
+                           DockPanel.Dock="Left"/>
                 
                 <!-- 窗口控制按钮 -->
                 <StackPanel DockPanel.Dock="Right" 
@@ -114,43 +44,22 @@
                     
                     <!-- 最小化按钮 -->
                     <Button Name="MinimizeButton" 
-                            Background="Orange" 
-                            Width="20" 
-                            Height="20" 
-                            Margin="3"
-                            BorderThickness="0"
-                            CornerRadius="3"
-                            Click="MinimizeButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Background="{TemplateBinding Background}"
-                                        CornerRadius="{TemplateBinding CornerRadius}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                            Classes="window-control-button"
+                            Background="{StaticResource MinimizeButtonBrush}"
+                            Click="MinimizeButton_Click"/>
                     
                     <!-- 退出按钮 -->
                     <Button Name="ExitButton" 
-                            Background="Red" 
-                            Width="20" 
-                            Height="20" 
-                            Margin="3"
-                            BorderThickness="0"
-                            CornerRadius="3"
-                            Click="ExitButton_Click">
-                        <Button.Template>
-                            <ControlTemplate>
-                                <Border Background="{TemplateBinding Background}"
-                                        CornerRadius="{TemplateBinding CornerRadius}"/>
-                            </ControlTemplate>
-                        </Button.Template>
-                    </Button>
+                            Classes="window-control-button"
+                            Background="{StaticResource CloseButtonBrush}"
+                            Click="ExitButton_Click"/>
                 </StackPanel>
             </DockPanel>
         </Border>
         
         <!-- 主要内容区域，使用2-3-2布局 -->
-        <Grid DockPanel.Dock="Bottom" Background="#263238">
+        <Grid Classes="main-content" 
+              DockPanel.Dock="Bottom">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
@@ -162,7 +71,7 @@
                 <!-- 浏览图片按钮 -->
                 <Button DockPanel.Dock="Top"
                         Content="浏览图片"
-                        Classes="browse-button"
+                        Classes="primary-button"
                         Margin="0,0,0,6"
                         Command="{Binding BrowseImageCommand}"/>
                 
@@ -170,26 +79,20 @@
                 <controls:ZoomableImage DockPanel.Dock="Bottom"
                                       HorizontalAlignment="Stretch"
                                       VerticalAlignment="Stretch"
-                                      Background="#37474F"
+                                      Background="{StaticResource SecondaryBackgroundBrush}"
                                       ImageSource="{Binding ImagePath}"/>
             </DockPanel>
             
             <!-- 中间区域 (3*) - 主要内容 -->
             <Grid Grid.Column="1" Margin="5">
                 <TextBlock Text="主要内容区域" 
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="White"
-                           FontSize="16"/>
+                           Classes="content-placeholder"/>
             </Grid>
             
             <!-- 右侧区域 (2*) - 控制面板 -->
             <Grid Grid.Column="2" Margin="5">
                 <TextBlock Text="控制面板" 
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"
-                           Foreground="White"
-                           FontSize="16"/>
+                           Classes="content-placeholder"/>
             </Grid>
         </Grid>
     </DockPanel>

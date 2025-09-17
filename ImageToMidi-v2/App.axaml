@@ -9,7 +9,21 @@
         <local:ViewLocator/>
     </Application.DataTemplates>
   
+    <Application.Resources>
+        <!-- 引用颜色资源文件 -->
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- 颜色定义 -->
+                <ResourceInclude Source="/Styles/Colors.axaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+    
     <Application.Styles>
         <FluentTheme />
+        
+        <!-- 应用全局样式 -->
+        <StyleInclude Source="/Styles/ButtonStyles.axaml"/>
+        <StyleInclude Source="/Styles/WindowStyles.axaml"/>
     </Application.Styles>
 </Application>

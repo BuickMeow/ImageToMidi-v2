@@ -1,0 +1,39 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <!-- 主题颜色定义 -->
+    
+    <!-- 主要背景色 -->
+    <Color x:Key="PrimaryBackgroundColor">#263238</Color>
+    <Color x:Key="SecondaryBackgroundColor">#37474F</Color>
+    
+    <!-- 按钮颜色 -->
+    <Color x:Key="PrimaryButtonColor">#3F51B5</Color>
+    <Color x:Key="PrimaryButtonHoverColor">#717EC8</Color>
+    <Color x:Key="PrimaryButtonPressedColor">#717EC8</Color>
+    <Color x:Key="PrimaryButtonDisabledColor">#666666</Color>
+    
+    <!-- 文字颜色 -->
+    <Color x:Key="PrimaryTextColor">#FFFFFF</Color>
+    <Color x:Key="DisabledTextColor">#999999</Color>
+    
+    <!-- 窗口控制按钮颜色 -->
+    <Color x:Key="MinimizeButtonColor">#FF9800</Color>
+    <Color x:Key="CloseButtonColor">#F44336</Color>
+    
+    <!-- 转换为画刷资源 -->
+    <SolidColorBrush x:Key="PrimaryBackgroundBrush" Color="{StaticResource PrimaryBackgroundColor}"/>
+    <SolidColorBrush x:Key="SecondaryBackgroundBrush" Color="{StaticResource SecondaryBackgroundColor}"/>
+    
+    <SolidColorBrush x:Key="PrimaryButtonBrush" Color="{StaticResource PrimaryButtonColor}"/>
+    <SolidColorBrush x:Key="PrimaryButtonHoverBrush" Color="{StaticResource PrimaryButtonHoverColor}"/>
+    <SolidColorBrush x:Key="PrimaryButtonPressedBrush" Color="{StaticResource PrimaryButtonPressedColor}"/>
+    <SolidColorBrush x:Key="PrimaryButtonDisabledBrush" Color="{StaticResource PrimaryButtonDisabledColor}"/>
+    
+    <SolidColorBrush x:Key="PrimaryTextBrush" Color="{StaticResource PrimaryTextColor}"/>
+    <SolidColorBrush x:Key="DisabledTextBrush" Color="{StaticResource DisabledTextColor}"/>
+    
+    <SolidColorBrush x:Key="MinimizeButtonBrush" Color="{StaticResource MinimizeButtonColor}"/>
+    <SolidColorBrush x:Key="CloseButtonBrush" Color="{StaticResource CloseButtonColor}"/>
+    
+</ResourceDictionary>
