@@ -3,6 +3,7 @@
         xmlns:vm="using:ImageToMidi_v2.ViewModels"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:controls="using:ImageToMidi_v2"
         mc:Ignorable="d" d:DesignWidth="1186" d:DesignHeight="496"
         x:Class="ImageToMidi_v2.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
@@ -86,9 +87,54 @@
             </DockPanel>
         </Border>
         
-        <!-- Main Content Area -->
+        <!-- 主要内容区域，使用2-3-2布局 -->
         <Grid DockPanel.Dock="Bottom" Background="#263238">
-            <!-- 内容区域现在是空的，移除了欢迎语 -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- 左侧区域 (2*) - 图片区域 -->
+            <DockPanel Grid.Column="0" Margin="5">
+                <!-- 浏览图片按钮 -->
+                <Button DockPanel.Dock="Top"
+                        Content="浏览图片"
+                        Background="#3F51B5"
+                        Foreground="White"
+                        CornerRadius="3"
+                        BorderThickness="0"
+                        Padding="15,8"
+                        Margin="0,0,0,10"
+                        HorizontalAlignment="Center"
+                        FontSize="14"
+                        Command="{Binding BrowseImageCommand}"/>
+                
+                <!-- 可缩放图片控件 -->
+                <controls:ZoomableImage DockPanel.Dock="Bottom"
+                                      HorizontalAlignment="Stretch"
+                                      VerticalAlignment="Stretch"
+                                      Background="#37474F"
+                                      ImageSource="{Binding ImagePath}"/>
+            </DockPanel>
+            
+            <!-- 中间区域 (3*) - 主要内容 -->
+            <Grid Grid.Column="1" Margin="5">
+                <TextBlock Text="主要内容区域" 
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           FontSize="16"/>
+            </Grid>
+            
+            <!-- 右侧区域 (2*) - 控制面板 -->
+            <Grid Grid.Column="2" Margin="5">
+                <TextBlock Text="控制面板" 
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                           FontSize="16"/>
+            </Grid>
         </Grid>
     </DockPanel>
 

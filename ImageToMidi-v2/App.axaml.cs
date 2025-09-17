@@ -23,10 +23,17 @@ namespace ImageToMidi_v2
                 // Avoid duplicate validations from both Avalonia and the CommunityToolkit. 
                 // More info: https://docs.avaloniaui.net/docs/guides/development-guides/data-validation#manage-validationplugins
                 DisableAvaloniaDataAnnotationValidation();
-                desktop.MainWindow = new MainWindow
+                
+                var viewModel = new MainWindowViewModel();
+                var mainWindow = new MainWindow
                 {
-                    DataContext = new MainWindowViewModel(),
+                    DataContext = viewModel
                 };
+                
+                // Set StorageProvider reference after window is created
+                viewModel.StorageProvider = mainWindow.StorageProvider;
+                
+                desktop.MainWindow = mainWindow;
             }
 
             base.OnFrameworkInitializationCompleted();
