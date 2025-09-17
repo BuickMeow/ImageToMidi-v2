@@ -5,13 +5,23 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ImageToMidi_v2.ZoomableImage">
   
-  <ScrollViewer HorizontalScrollBarVisibility="Auto"
-                VerticalScrollBarVisibility="Auto"
-                Background="Transparent">
+  <Grid x:Name="Container" 
+        Background="Transparent"
+        ClipToBounds="True">
+    
     <Image x:Name="ImageControl"
            Stretch="Uniform"
            HorizontalAlignment="Center"
-           VerticalAlignment="Center"/>
-  </ScrollViewer>
+           VerticalAlignment="Center"
+           RenderTransformOrigin="0.5,0.5">
+      <Image.RenderTransform>
+        <TransformGroup>
+          <ScaleTransform ScaleX="1" ScaleY="1"/>
+          <TranslateTransform X="0" Y="0"/>
+        </TransformGroup>
+      </Image.RenderTransform>
+    </Image>
+    
+  </Grid>
   
 </UserControl>
