@@ -1,0 +1,93 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:ImageToMidi_v2.ViewModels"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="ImageToMidi_v2.Views.MainWindow"
+        x:DataType="vm:MainWindowViewModel"
+        Icon="/Assets/i2m.ico"
+        Title="Image To MIDI"
+        ExtendClientAreaToDecorationsHint="True"
+        ExtendClientAreaChromeHints="NoChrome"
+        ExtendClientAreaTitleBarHeightHint="50"
+        Background="#263238">
+
+    <Design.DataContext>
+        <!-- This only sets the DataContext for the previewer in an IDE,
+             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <vm:MainWindowViewModel/>
+    </Design.DataContext>
+
+    <DockPanel>
+        <!-- Custom Title Bar -->
+        <Border Background="#37474F" 
+                DockPanel.Dock="Top" 
+                Height="50" 
+                x:Name="TitleBar"
+                PointerPressed="TitleBar_PointerPressed">
+            <DockPanel>
+                <!-- App Icon -->
+                <Image Width="40" 
+                       Height="40" 
+                       Margin="5" 
+                       Source="/Assets/i2m.png"
+                       DockPanel.Dock="Left"/>
+                
+                <!-- Title -->
+                <TextBlock Text="Image To MIDI" 
+                           Margin="10,0,0,0" 
+                           DockPanel.Dock="Left"
+                           VerticalAlignment="Center" 
+                           FontSize="20"
+                           Foreground="White"/>
+                
+                <!-- Window Controls -->
+                <StackPanel DockPanel.Dock="Right" 
+                           Orientation="Horizontal" 
+                           HorizontalAlignment="Right" 
+                           Margin="0,0,10,0"
+                           VerticalAlignment="Center">
+                    
+                    <Button Name="MinimizeButton" 
+                            Background="Orange" 
+                            Width="20" 
+                            Height="20" 
+                            Margin="3"
+                            BorderThickness="0"
+                            CornerRadius="3"
+                            Click="MinimizeButton_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                    
+                    <Button Name="ExitButton" 
+                            Background="Red" 
+                            Width="20" 
+                            Height="20" 
+                            Margin="3"
+                            BorderThickness="0"
+                            CornerRadius="3"
+                            Click="ExitButton_Click">
+                        <Button.Template>
+                            <ControlTemplate>
+                                <Border Background="{TemplateBinding Background}"
+                                        CornerRadius="{TemplateBinding CornerRadius}"/>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+        
+        <!-- Main Content Area -->
+        <Grid DockPanel.Dock="Bottom" Background="#263238">
+            <!-- 内容区域现在是空的，移除了欢迎语 -->
+        </Grid>
+    </DockPanel>
+
+</Window>

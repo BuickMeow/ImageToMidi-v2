@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="ImageToMidi-v2/ImageToMidi-v2.csproj">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+  <Project Path="MIDIModificationFramework/MIDIModificationFramework.csproj" Id="49122f52-0b71-46be-9f86-17a53c7ff333">
+    <Platform Solution="*|x64" Project="x64" />
+  </Project>
+</Solution>
