@@ -17,27 +17,87 @@
         Height="496">
 
     <Design.DataContext>
-        <!-- This only sets the DataContext for the previewer in an IDE,
-             to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs) -->
+        <!-- 这只是为IDE预览器设置DataContext，实际运行时的DataContext在代码中设置 -->
         <vm:MainWindowViewModel/>
     </Design.DataContext>
 
+    <Window.Styles>
+        <!-- 浏览图片按钮样式 -->
+        <Style Selector="Button.browse-button">
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border Name="PART_Border"
+                            Background="#3F51B5"
+                            CornerRadius="3"
+                            BorderThickness="0">
+                        <Border.Transitions>
+                            <Transitions>
+                                <!-- 背景颜色过渡动画 -->
+                                <BrushTransition Property="Background" Duration="0:0:0.2"/>
+                            </Transitions>
+                        </Border.Transitions>
+                        <!-- 按钮内容容器 -->
+                        <ContentPresenter Name="PART_ContentPresenter"
+                                        Content="{TemplateBinding Content}"
+                                        Foreground="White"
+                                        HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                        VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                        Padding="{TemplateBinding Padding}"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+        
+        <!-- 鼠标悬停状态下的背景颜色 -->
+        <Style Selector="Button.browse-button:pointerover /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#717EC8"/>
+        </Style>
+        <!-- 鼠标悬停状态下的文字颜色 -->
+        <Style Selector="Button.browse-button:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+        <!-- 鼠标按下状态下的背景颜色 -->
+        <Style Selector="Button.browse-button:pressed /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#717EC8"/>
+        </Style>
+        <!-- 鼠标按下状态下的文字颜色 -->
+        <Style Selector="Button.browse-button:pressed /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+        
+        <!-- 禁用状态下的背景颜色 -->
+        <Style Selector="Button.browse-button:disabled /template/ Border#PART_Border">
+            <Setter Property="Background" Value="#666666"/>
+        </Style>
+        <!-- 禁用状态下的文字颜色 -->
+        <Style Selector="Button.browse-button:disabled /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Foreground" Value="#999999"/>
+        </Style>
+    </Window.Styles>
+
     <DockPanel>
-        <!-- Custom Title Bar -->
+        <!-- 自定义标题栏 -->
         <Border Background="#37474F" 
                 DockPanel.Dock="Top" 
                 Height="50" 
                 x:Name="TitleBar"
                 PointerPressed="TitleBar_PointerPressed">
             <DockPanel>
-                <!-- App Icon -->
+                <!-- 应用图标 -->
                 <Image Width="40" 
                        Height="40" 
                        Margin="5" 
                        Source="/Assets/i2m.png"
                        DockPanel.Dock="Left"/>
                 
-                <!-- Title -->
+                <!-- 标题文字 -->
                 <TextBlock Text="Image To MIDI" 
                            Margin="10,0,0,0" 
                            DockPanel.Dock="Left"
@@ -45,13 +105,14 @@
                            FontSize="20"
                            Foreground="White"/>
                 
-                <!-- Window Controls -->
+                <!-- 窗口控制按钮 -->
                 <StackPanel DockPanel.Dock="Right" 
                            Orientation="Horizontal" 
                            HorizontalAlignment="Right" 
                            Margin="0,0,10,0"
                            VerticalAlignment="Center">
                     
+                    <!-- 最小化按钮 -->
                     <Button Name="MinimizeButton" 
                             Background="Orange" 
                             Width="20" 
@@ -68,6 +129,7 @@
                         </Button.Template>
                     </Button>
                     
+                    <!-- 退出按钮 -->
                     <Button Name="ExitButton" 
                             Background="Red" 
                             Width="20" 
@@ -96,18 +158,12 @@
             </Grid.ColumnDefinitions>
             
             <!-- 左侧区域 (2*) - 图片区域 -->
-            <DockPanel Grid.Column="0" Margin="5">
+            <DockPanel Grid.Column="0" Margin="7">
                 <!-- 浏览图片按钮 -->
                 <Button DockPanel.Dock="Top"
                         Content="浏览图片"
-                        Background="#3F51B5"
-                        Foreground="White"
-                        CornerRadius="3"
-                        BorderThickness="0"
-                        Padding="15,8"
-                        Margin="0,0,0,10"
-                        HorizontalAlignment="Center"
-                        FontSize="14"
+                        Classes="browse-button"
+                        Margin="0,0,0,6"
                         Command="{Binding BrowseImageCommand}"/>
                 
                 <!-- 可缩放图片控件 -->
