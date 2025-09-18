@@ -32,13 +32,9 @@ namespace ImageToMidi_v2.Views
             // 在窗口加载后初始化窗口服务
             _windowService = new WindowService(this);
             
-            // 如果 DataContext 是 MainWindowViewModel，则使用服务重新创建它
-            if (DataContext is MainWindowViewModel viewModel)
-            {
-                // 创建文件对话框服务和窗口服务，然后重新创建 ViewModel
-                var fileDialogService = new FileDialogService(StorageProvider);
-                DataContext = new MainWindowViewModel(fileDialogService, _windowService);
-            }
+            // 创建文件对话框服务和窗口服务，然后创建 ViewModel
+            var fileDialogService = new FileDialogService(StorageProvider);
+            DataContext = new MainWindowViewModel(fileDialogService, _windowService);
         }
 
         /// <summary>
