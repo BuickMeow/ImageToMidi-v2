@@ -3,6 +3,7 @@
     <Platform Name="Any CPU" />
     <Platform Name="x64" />
   </Configurations>
+  <Project Path="ImageToMidi-v2.Tests/ImageToMidi-v2.Tests.csproj" Id="9bb4d858-3b84-48a1-ab8d-03b7c48eee90" />
   <Project Path="ImageToMidi-v2/ImageToMidi-v2.csproj">
     <Platform Solution="*|x64" Project="x64" />
   </Project>

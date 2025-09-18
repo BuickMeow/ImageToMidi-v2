@@ -1,67 +1,74 @@
 using Avalonia.Controls;
 using Avalonia.Input;
 using Avalonia.Interactivity;
-using System;
+using ImageToMidi_v2.Services.Implementation;
+using ImageToMidi_v2.ViewModels;
 
 namespace ImageToMidi_v2.Views
 {
+    /// <summary>
+    /// 主窗口视图，提供用户界面和基本的窗口交互功能
+    /// </summary>
     public partial class MainWindow : Window
     {
-        private DateTime _lastClickTime = DateTime.MinValue;
-        private const int DoubleClickTimeoutMs = 400; // 双击间隔时间（毫秒）
-        private bool _isDragging = false;
+        private WindowService? _windowService;
 
+        /// <summary>
+        /// 初始化 MainWindow 的新实例
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 窗口加载完成时的处理，初始化服务和视图模型
+        /// </summary>
+        /// <param name="e">路由事件参数</param>
+        protected override void OnLoaded(Avalonia.Interactivity.RoutedEventArgs e)
+        {
+            base.OnLoaded(e);
+            
+            // 在窗口加载后初始化窗口服务
+            _windowService = new WindowService(this);
+            
+            // 如果 DataContext 是 MainWindowViewModel，则使用服务重新创建它
+            if (DataContext is MainWindowViewModel viewModel)
+            {
+                // 创建文件对话框服务和窗口服务，然后重新创建 ViewModel
+                var fileDialogService = new FileDialogService(StorageProvider);
+                DataContext = new MainWindowViewModel(fileDialogService, _windowService);
+            }
+        }
+
+        /// <summary>
+        /// 处理标题栏的鼠标按下事件，支持窗口拖拽和双击最大化
+        /// </summary>
+        /// <param name="sender">事件发送者</param>
+        /// <param name="e">鼠标按下事件参数</param>
         private void TitleBar_PointerPressed(object? sender, PointerPressedEventArgs e)
         {
-            if (e.GetCurrentPoint(this).Properties.IsLeftButtonPressed)
-            {
-                var currentTime = DateTime.Now;
-                var timeSinceLastClick = (currentTime - _lastClickTime).TotalMilliseconds;
-
-                if (timeSinceLastClick <= DoubleClickTimeoutMs)
-                {
-                    // 检测到双击 - 切换最大化状态
-                    HandleDoubleClick();
-                    _lastClickTime = DateTime.MinValue; // 重置以避免连续点击
-                    return;
-                }
-
-                _lastClickTime = currentTime;
-                _isDragging = false;
-                
-                // 开始拖拽
-                BeginMoveDrag(e);
-            }
+            _windowService?.HandleTitleBarClick(e);
         }
 
-        private void HandleDoubleClick()
-        {
-            // 双击标题栏切换最大化/还原状态
-            if (WindowState == WindowState.Maximized)
-            {
-                WindowState = WindowState.Normal;
-            }
-            else
-            {
-                WindowState = WindowState.Maximized;
-            }
-        }
-
+        /// <summary>
+        /// 处理最小化按钮点击事件
+        /// </summary>
+        /// <param name="sender">事件发送者</param>
+        /// <param name="e">路由事件参数</param>
         private void MinimizeButton_Click(object? sender, RoutedEventArgs e)
         {
-            // 最小化窗口
-            WindowState = WindowState.Minimized;
+            _windowService?.Minimize();
         }
 
+        /// <summary>
+        /// 处理退出按钮点击事件
+        /// </summary>
+        /// <param name="sender">事件发送者</param>
+        /// <param name="e">路由事件参数</param>
         private void ExitButton_Click(object? sender, RoutedEventArgs e)
         {
-            // 关闭应用程序
-            Close();
+            _windowService?.Close();
         }
     }
 }
