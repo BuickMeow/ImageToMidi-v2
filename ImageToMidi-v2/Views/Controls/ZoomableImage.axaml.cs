@@ -13,13 +13,13 @@ using ImageToMidi_v2.Services.Implementation;
 namespace ImageToMidi_v2;
 
 /// <summary>
-/// 可缩放图片控件，提供图片显示、缩放、平移和动画功能
+/// 可缩放图片控件，提供图片显示、缩放、平移和拖拽功能
 /// 支持鼠标滚轮缩放、拖拽平移以及平滑动画效果
 /// </summary>
 public partial class ZoomableImage : UserControl
 {
     /// <summary>
-    /// 图片源路径的依赖属性
+    /// 图片源路径依赖属性
     /// </summary>
     public static readonly StyledProperty<string?> ImageSourceProperty =
         AvaloniaProperty.Register<ZoomableImage, string?>(nameof(ImageSource));
@@ -44,17 +44,17 @@ public partial class ZoomableImage : UserControl
     private readonly IImageAnimationService _animationService;
 
     /// <summary>
-    /// 初始化 ZoomableImage 控件的新实例（使用默认服务）
+    /// 初始化 ZoomableImage 控件，实例化使用默认服务
     /// </summary>
     public ZoomableImage() : this(new ZoomPanCalculator(), null)
     {
     }
 
     /// <summary>
-    /// 初始化 ZoomableImage 控件的新实例（使用指定服务）
+    /// 初始化 ZoomableImage 控件，实例化使用指定服务
     /// </summary>
-    /// <param name="zoomPanCalculator">缩放平移计算服务</param>
-    /// <param name="animationService">动画服务，如果为 null 则使用默认实现</param>
+    /// <param name="zoomPanCalculator">缩放平移计算器</param>
+    /// <param name="animationService">动画服务，为 null 则使用默认实现</param>
     public ZoomableImage(IZoomPanCalculator zoomPanCalculator, IImageAnimationService? animationService)
     {
         _zoomPanCalculator = zoomPanCalculator ?? throw new ArgumentNullException(nameof(zoomPanCalculator));
@@ -85,16 +85,16 @@ public partial class ZoomableImage : UserControl
         // 获取图片控件引用
         _imageControl = this.FindControl<Image>("ImageControl");
 
-        // 获取变换对象引用
+        // 获取变换组件引用
         if (_imageControl?.RenderTransform is TransformGroup transformGroup)
         {
             foreach (var transform in transformGroup.Children)
             {
-                if (transform is ScaleTransform scaleTransform && _scaleTransform == null)
+                if (transform is ScaleTransform scaleTransform && _scaleTransform is null)
                 {
                     _scaleTransform = scaleTransform;
                 }
-                else if (transform is TranslateTransform translateTransform && _translateTransform == null)
+                else if (transform is TranslateTransform translateTransform && _translateTransform is null)
                 {
                     _translateTransform = translateTransform;
                 }
@@ -105,7 +105,7 @@ public partial class ZoomableImage : UserControl
     }
 
     /// <summary>
-    /// 设置鼠标事件处理器
+    /// 设置事件处理器
     /// </summary>
     private void SetupEventHandlers()
     {
@@ -173,23 +173,26 @@ public partial class ZoomableImage : UserControl
     }
 
     /// <summary>
-    /// 更新变换矩阵，应用当前的缩放和平移
+    /// 更新变换，应用当前缩放和平移 - 关键修复：使用正确的数学公式
     /// </summary>
     private void UpdateTransforms()
     {
         // 应用缩放变换
-        if (_scaleTransform != null)
+        if (_scaleTransform is not null)
         {
             _scaleTransform.ScaleX = _state.Zoom;
             _scaleTransform.ScaleY = _state.Zoom;
         }
 
-        // 应用平移变换
-        if (_translateTransform != null && _state.ContainerSize.Width > 0 && _state.ContainerSize.Height > 0 && _state.ImageSize.Width > 0 && _state.ImageSize.Height > 0)
+        // 应用平移变换 - 关键修复：添加缩放倍率
+        if (_translateTransform is not null && _state.ContainerSize.Width > 0 && _state.ContainerSize.Height > 0 && _state.ImageSize.Width > 0 && _state.ImageSize.Height > 0)
         {
             var displaySize = _zoomPanCalculator.GetDisplaySize(_state);
-            _translateTransform.X = _state.Offset.X * displaySize.Width;
-            _translateTransform.Y = _state.Offset.Y * displaySize.Height;
+            
+            // 关键修复：实际像素偏移 = 归一化偏移 × 显示尺寸 × 缩放倍率
+            // 这样随着缩放增加，用户可移动的实际像素距离也会增加
+            _translateTransform.X = _state.Offset.X * displaySize.Width * _state.Zoom;
+            _translateTransform.Y = _state.Offset.Y * displaySize.Height * _state.Zoom;
         }
     }
 
@@ -211,20 +214,20 @@ public partial class ZoomableImage : UserControl
         // 限制缩放范围
         _state.TargetZoom = Math.Max(ZoomPanConstants.MinZoom, Math.Min(ZoomPanConstants.MaxZoom, _state.TargetZoom));
 
-        // 处理缩小到原始大小以下的特殊情况
+        // 处理缩小到原始大小的情况
         if (_state.TargetZoom < 1)
         {
             _state.TargetZoom = 1;
             if (_state.Zoom <= 1)
             {
-                // 重置时的特殊处理
+                // 重置时的额外处理
                 var resetMultiplier = Math.Pow(scaleMult, ZoomPanConstants.ResetZoomMultiplier);
                 _state.Offset = new Point(_state.Offset.X * resetMultiplier, _state.Offset.Y * resetMultiplier);
                 UpdateTransforms();
             }
         }
 
-        // 获取鼠标位置并以此为中心缩放
+        // 获取鼠标位置并以此为中心进行缩放
         var mousePosition = e.GetPosition(this);
         StartSmoothZoomAtPosition(mousePosition);
         
@@ -263,18 +266,8 @@ public partial class ZoomableImage : UserControl
         {
             _state.MouseNotMoved = false;
 
-            // 计算拖拽敏感度，缩放级别越高敏感度越低
-            double zoom = Math.Max(1.0, _state.Zoom);
-            double sensitivity = 1.0 / zoom;
-
-            // 计算显示尺寸
-            var displaySize = _zoomPanCalculator.GetDisplaySize(_state);
-
-            // 更新偏移量
-            _state.Offset = new Point(
-                _state.Offset.X + mouseOffset.X * sensitivity / displaySize.Width,
-                _state.Offset.Y + mouseOffset.Y * sensitivity / displaySize.Height
-            );
+            // 使用修复的固定像素移动函数，确保1:1的像素移动关系
+            _state.Offset = _zoomPanCalculator.UpdateOffsetByPixelMovement(_state, mouseOffset);
             _zoomPanCalculator.ClampOffset(_state);
 
             _state.MouseMoveStart = currentMousePos;
@@ -297,10 +290,10 @@ public partial class ZoomableImage : UserControl
 
     #endregion
 
-    #region 动画功能
+    #region 动画处理
 
     /// <summary>
-    /// 启动以控件中心为基准的平滑缩放动画
+    /// 以控件中心为基准的平滑缩放动画
     /// </summary>
     private void StartSmoothZoom()
     {
@@ -309,9 +302,9 @@ public partial class ZoomableImage : UserControl
     }
 
     /// <summary>
-    /// 启动以指定位置为中心的平滑缩放动画
+    /// 以指定位置为中心的平滑缩放动画
     /// </summary>
-    /// <param name="mousePosition">缩放中心位置</param>
+    /// <param name="mousePosition">鼠标中心位置</param>
     private void StartSmoothZoomAtPosition(Point mousePosition)
     {
         _animationService.AnimateZoomToPositionAsync(_state, mousePosition, UpdateTransforms, () => { });
@@ -368,7 +361,7 @@ public partial class ZoomableImage : UserControl
     protected override void OnUnloaded(Avalonia.Interactivity.RoutedEventArgs e)
     {
         base.OnUnloaded(e);
-        // 停止动画以释放资源
+        // 停止动画并释放资源
         _animationService.StopAnimation();
     }
 }

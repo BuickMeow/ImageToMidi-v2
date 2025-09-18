@@ -10,7 +10,7 @@ namespace ImageToMidi_v2.Configuration
         /// <summary>
         /// 缩放步长，控制每次缩放操作的幅度
         /// </summary>
-        public const double ZoomStep = 1.0;
+        public const double ZoomStep = 1;
         
         /// <summary>
         /// 最小缩放级别，防止图片缩放过小
@@ -30,13 +30,30 @@ namespace ImageToMidi_v2.Configuration
         /// <summary>
         /// 鼠标滚轮缩放的倍数因子
         /// </summary>
-        public const double ZoomScaleMultiplier = 1.3;
+        public const double ZoomScaleMultiplier = 120.0;
         
         /// <summary>
         /// 鼠标滚轮缩放的敏感度因子
         /// </summary>
-        public const double ZoomSensitivityFactor = 120.0;
+        public const double ZoomSensitivityFactor = 30.0;
         
+        /*// Edge margin settings for pan clamping
+        
+        /// <summary>
+        /// 最小边缘空间（像素），确保基本的边缘可见性
+        /// </summary>
+        public const double MinEdgeMargin = 20.0;
+        
+        /// <summary>
+        /// 基础边缘空间比例，相对于容器大小的比例
+        /// </summary>
+        public const double BaseEdgeMarginRatio = 0.125; // 1/8 of container size
+        
+        /// <summary>
+        /// 边缘空间缩放因子，控制边缘空间随缩放倍率的变化程度
+        /// </summary>
+        public const double EdgeMarginScaleFactor = 2.0;
+        */
         // Animation settings
         
         /// <summary>

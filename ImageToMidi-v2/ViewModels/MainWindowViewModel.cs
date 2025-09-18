@@ -17,7 +17,8 @@ namespace ImageToMidi_v2.ViewModels
         /// <summary>
         /// 获取欢迎消息
         /// </summary>
-        public string Greeting { get; } = "Welcome to Avalonia!";
+        //public string Greeting { get; } = "Welcome to Avalonia!";
+        // 节能酱：这还留着？这有什么用啊?
         
         /// <summary>
         /// 获取或设置当前选中的图片路径
